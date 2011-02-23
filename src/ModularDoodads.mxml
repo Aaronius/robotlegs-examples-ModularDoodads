@@ -8,16 +8,57 @@
 
     <fx:Script>
         <![CDATA[
-            import mx.modules.Module;
-            
-            import robotlegs.examples.modulardoodads.common.events.LoggingEvent;
-            import robotlegs.examples.modulardoodads.common.events.ModuleCommandTriggerEvent;
-            import robotlegs.examples.modulardoodads.modules.doodad.DoodadModule;
+			import mx.controls.Alert;
+			import mx.core.IVisualElement;
+			import mx.events.ModuleEvent;
+			import mx.modules.IModuleInfo;
+			import mx.modules.ModuleManager;
+			
+			import robotlegs.examples.modulardoodads.common.events.ModuleCommandTriggerEvent;
 
+			protected var info:IModuleInfo;
+			
             protected function addDoodad_clickHandler(event:MouseEvent):void
             {
-                doodadHolder.addElement(new DoodadModule());
+				if (createModuleInfo())
+				{
+					info.load(ApplicationDomain.currentDomain, null, null, moduleFactory);
+				}
             }
+			
+			protected function createModuleInfo():Boolean
+			{
+				if (!info)
+				{
+					info = ModuleManager.getModule('robotlegs/examples/modulardoodads/modules/doodad/DoodadModule.swf');
+					info.addEventListener(ModuleEvent.READY, moduleInfo_readyHandler);
+					info.addEventListener(ModuleEvent.ERROR, moduleInfo_errorHandler);
+					return true;
+				}
+				return false;
+			}
+			
+			protected function destroyModuleInfo():void
+			{
+				if (info)
+				{
+					info.removeEventListener(ModuleEvent.READY, moduleInfo_readyHandler);
+					info.removeEventListener(ModuleEvent.ERROR, moduleInfo_errorHandler);
+					info = null;
+				}
+			}
+			
+			protected function moduleInfo_readyHandler(event:ModuleEvent):void
+			{
+				doodadHolder.addElement(info.factory.create() as IVisualElement);
+				destroyModuleInfo();
+			}
+			
+			protected function moduleInfo_errorHandler(event:ModuleEvent):void
+			{
+				Alert.show(event.errorText);
+				destroyModuleInfo();
+			}
             
             public function setFocusOnAddDoodadButton():void
             {

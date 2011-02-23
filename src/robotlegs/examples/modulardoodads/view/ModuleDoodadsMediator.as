@@ -6,7 +6,6 @@ package robotlegs.examples.modulardoodads.view
     
     import robotlegs.examples.modulardoodads.common.events.LoggingEvent;
     import robotlegs.examples.modulardoodads.common.events.ModuleCommandTriggerEvent;
-    import robotlegs.examples.modulardoodads.modules.doodad.DoodadModule;
     import robotlegs.examples.modulardoodads.modules.doodad.events.DoodadModuleEvent;
     
     public class ModuleDoodadsMediator extends ModuleMediator
