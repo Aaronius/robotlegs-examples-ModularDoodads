@@ -14,7 +14,12 @@
 			import mx.modules.IModuleInfo;
 			import mx.modules.ModuleManager;
 			
+			import robotlegs.examples.modulardoodads.common.events.LoggingEvent;
 			import robotlegs.examples.modulardoodads.common.events.ModuleCommandTriggerEvent;
+			
+			// This is only a linkage so the LoggingEvent class gets compiled into the main swf.
+			// If this isn't linked into the main swf an error will be thrown.
+			protected var loggingEventLinkage:LoggingEvent;
 
 			protected var info:IModuleInfo;
 			
@@ -98,5 +103,7 @@
         </s:Group>
         
     </s:Scroller>
-    <logger:LoggerModule/>
+	<mx:ModuleLoader url="robotlegs/examples/modulardoodads/modules/logger/LoggerModule.swf"
+			applicationDomain="{ApplicationDomain.currentDomain}" width="100%"
+			error="Alert.show(event.errorText)"/>
 </s:Application>
